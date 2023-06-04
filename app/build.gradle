@@ -74,4 +74,7 @@ dependencies {
 
     //Logger for Retrofit
     implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
+
+    //Coil
+    implementation 'io.coil-kt:coil:1.4.0'
 }
