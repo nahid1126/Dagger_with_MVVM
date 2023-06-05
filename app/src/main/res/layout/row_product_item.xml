@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@{product.title}"
+                android:text="@{product.title+`\n Price : `+product.price}"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </LinearLayout>

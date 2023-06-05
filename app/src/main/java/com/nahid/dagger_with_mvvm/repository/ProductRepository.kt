@@ -13,16 +13,22 @@ class ProductRepository @Inject constructor(
 ) {
 
     private val _products = MutableLiveData<List<Products>>()
+    private val dao = productDB.getProductDao()
     val productList: LiveData<List<Products>>
         get() = _products
 
+    val productListFromDB = dao.getProducts()
     suspend fun getProducts() {
         val response = apiInterface.getProducts()
         if (response.isSuccessful && response.body() != null) {
-            productDB.getProductDao().addProduct(response.body()!!)
             _products.postValue(response.body())
         } else {
             _products.postValue(ArrayList())
         }
+    }
+
+
+    suspend fun insertProducts(productList: List<Products>) {
+        dao.addProduct(productList)
     }
 }

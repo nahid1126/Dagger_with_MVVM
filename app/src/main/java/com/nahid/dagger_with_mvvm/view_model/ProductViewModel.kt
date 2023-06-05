@@ -17,4 +17,12 @@ class ProductViewModel(private val productRepository: ProductRepository) : ViewM
             productRepository.getProducts()
         }
     }
+
+    fun insertLocalDB(products: List<Products>) {
+        viewModelScope.launch {
+            productRepository.insertProducts(products)
+        }
+    }
+
+    val productList = productRepository.productListFromDB
 }
