@@ -2,14 +2,19 @@ package com.nahid.dagger_with_mvvm.view.activities
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.nahid.dagger_with_mvvm.AppApplication
 import com.nahid.dagger_with_mvvm.databinding.ActivityMainBinding
+import com.nahid.dagger_with_mvvm.model.network.NetworkResponse
 import com.nahid.dagger_with_mvvm.view.adapter.ProductAdapter
 import com.nahid.dagger_with_mvvm.view_model.ProductViewModel
 import com.nahid.dagger_with_mvvm.view_model.ProductViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 private const val TAG = "MainActivity"
@@ -37,19 +42,34 @@ class MainActivity : AppCompatActivity() {
                 GridLayoutManager(this@MainActivity, 2)
             adapter = productAdapter
         }
-        productViewModel.productLiveData.observe(this) {
-            if (it.isNotEmpty()) {
-                it?.let {
-                    progressDialog.show()
-                    productViewModel.insertLocalDB(it)
+        lifecycleScope.launchWhenCreated {
+            productViewModel.productsFlow.collectLatest {
+                when (it) {
+                    is NetworkResponse.Empty -> {
+                    }
+                    is NetworkResponse.Error -> {
+                        progressDialog.dismiss()
+                        Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
+                    }
+                    is NetworkResponse.Loading -> {
+                        progressDialog.show()
+                    }
+                    is NetworkResponse.Success -> {
+                        progressDialog.dismiss()
+                        it.data?.let {
+                            productViewModel.insertLocalDB(it)
+                        }
+                    }
                 }
             }
         }
 
-        productViewModel.productList.observe(this) {
-            it?.let {
-                productAdapter.setProduct(it)
-                progressDialog.dismiss()
+        lifecycleScope.launchWhenCreated {
+            productViewModel.productList.collectLatest {
+                it?.let {
+                    productAdapter.setProduct(it)
+                    Log.d(TAG, "onCreateView: ${it.size}")
+                }
             }
         }
     }
