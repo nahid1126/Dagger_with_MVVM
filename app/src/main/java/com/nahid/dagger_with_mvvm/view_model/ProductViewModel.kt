@@ -1,5 +1,6 @@
 package com.nahid.dagger_with_mvvm.view_model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nahid.dagger_with_mvvm.model.data.Products
@@ -9,8 +10,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ProductViewModel(private val productRepository: ProductRepository) : ViewModel() {
+private const val TAG = "ProductViewModel"
+
+class ProductViewModel @Inject constructor(
+    private val productRepository: ProductRepository,
+    private val randomize: Randomize
+) : ViewModel() {
 
     val productsFlow = productRepository.getProductList()
 
@@ -33,4 +40,10 @@ class ProductViewModel(private val productRepository: ProductRepository) : ViewM
     val productList = productRepository.productListFromDB.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), null
     )
+}
+
+class Randomize @Inject constructor() {
+    fun doAction() {
+        Log.d(TAG, "doAction: ")
+    }
 }

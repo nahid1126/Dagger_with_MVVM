@@ -1,4 +1,4 @@
-package com.nahid.dagger_with_mvvm.model.module
+package com.nahid.dagger_with_mvvm.model.di
 
 import android.content.Context
 import androidx.room.Room

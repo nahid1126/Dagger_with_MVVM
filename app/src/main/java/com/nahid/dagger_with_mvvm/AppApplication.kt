@@ -1,8 +1,8 @@
 package com.nahid.dagger_with_mvvm
 
 import android.app.Application
-import com.nahid.dagger_with_mvvm.model.component.ApplicationComponent
-import com.nahid.dagger_with_mvvm.model.component.DaggerApplicationComponent
+import com.nahid.dagger_with_mvvm.model.di.ApplicationComponent
+import com.nahid.dagger_with_mvvm.model.di.DaggerApplicationComponent
 
 class AppApplication : Application() {
 

@@ -1,4 +1,4 @@
-package com.nahid.dagger_with_mvvm.model.module
+package com.nahid.dagger_with_mvvm.model.di
 
 import com.nahid.dagger_with_mvvm.model.network.ApiInterface
 import com.nahid.dagger_with_mvvm.utils.AppConstant
